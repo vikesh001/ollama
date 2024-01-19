@@ -91,8 +91,6 @@ jobs:
   lint:
     needs:
       - generate
-      - generate-cuda
-      - generate-rocm
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -120,22 +118,10 @@ jobs:
         with:
           name: ${{ matrix.os }}-${{ matrix.arch }}-libraries
           path: llm/llama.cpp/build
-      - if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: actions/download-artifact@v4
-        with:
-          name: cuda-11.8.0-libraries
-          path: llm/llama.cpp/build/cuda
-      - if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: actions/download-artifact@v4
-        with:
-          name: rocm-6.0-libraries
-          path: llm/llama.cpp/build/rocm
       - uses: golangci/golangci-lint-action@v3
   test:
     needs:
       - generate
-      - generate-cuda
-      - generate-rocm
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -161,21 +147,6 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.os }}-${{ matrix.arch }}-libraries
-          path: llm/llama.cpp/build
-      - if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: actions/download-artifact@v4
-        with:
-          name: cuda-11.8.0-libraries
-          path: llm/llama.cpp/build
-      - if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: actions/download-artifact@v4
-        with:
-          name: rocm-5.7.1-libraries
-          path: llm/llama.cpp/build
-      - if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: actions/download-artifact@v4
-        with:
-          name: rocm-6.0-libraries
           path: llm/llama.cpp/build
       - run: go build
       - run: go test -v ./...
