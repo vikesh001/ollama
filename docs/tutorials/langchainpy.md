@@ -17,7 +17,7 @@ Let's start by asking a simple question that we can get an answer to from the **
 Then we can create a model and ask the question:
 
 ```python
-from langchain.llms import Ollama
+from langchain_community.llms import Ollama
 ollama = Ollama(base_url='http://localhost:11434',
 model="llama2")
 print(ollama("why is the sky blue"))
